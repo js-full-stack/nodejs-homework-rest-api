@@ -9,16 +9,16 @@ const getAllContacts = async () => {
   return parsedContacts
 }
 
-const listContacts = async (req, res) => {
+const listContacts = async (_, res, next) => {
   try {
     const contacts = await getAllContacts()
     return res.status(200).json({ contacts, status: 200, message: 'success' })
   } catch (error) {
-    console.erorr(error)
+    next(error)
   }
 }
 
-const getContactById = async (req, res) => {
+const getContactById = async (req, res, next) => {
   const { contactId } = req.params
   try {
     const contactsList = await getAllContacts()
@@ -34,11 +34,11 @@ const getContactById = async (req, res) => {
     }
     return res.status(200).json({ contact, status: 200, message: 'success' })
   } catch (error) {
-    console.error(error)
+    next(error)
   }
 }
 
-const addContact = async (req, res) => {
+const addContact = async (req, res, next) => {
   const { name, email, phone } = req.body
   try {
     const newContact = {
@@ -53,11 +53,11 @@ const addContact = async (req, res) => {
     await fs.writeFile(contactsPath, JSON.stringify(newContactList), 'utf-8')
     return res.status(201).json({ status: 201, message: 'success' })
   } catch (error) {
-    console.error(error)
+    next(error)
   }
 }
 
-const removeContact = async (req, res) => {
+const removeContact = async (req, res, next) => {
   try {
     const { contactId } = req.params
     const contactList = await getAllContacts()
@@ -67,11 +67,11 @@ const removeContact = async (req, res) => {
     await fs.writeFile(contactsPath, JSON.stringify(newContactList), 'utf-8')
     return res.status(200).json({ status: 200, message: 'contact deleted' })
   } catch (error) {
-    console.error(error)
+    next(error)
   }
 }
 
-const updateContact = async (req, res) => {
+const updateContact = async (req, res, next) => {
   try {
     const { contactId } = req.params
     const { name, email, phone } = req.body
@@ -92,7 +92,7 @@ const updateContact = async (req, res) => {
     await fs.writeFile(contactsPath, JSON.stringify(newContact), 'utf-8')
     return res.json({ status: 'success' })
   } catch (error) {
-    console.error(error)
+    next(error)
   }
 }
 

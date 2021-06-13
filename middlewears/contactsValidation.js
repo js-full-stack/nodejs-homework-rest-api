@@ -13,7 +13,7 @@ module.exports = {
       return res.status(400).json({
         status: 400,
         message: 'fields name, mail and phone are required!',
-        details: validationResult.error.details
+        details: validationResult.error.details[0].message.replace(/"/g, '')
       })
     }
 
@@ -32,7 +32,7 @@ module.exports = {
       return res.status(400).json({
         status: 400,
         message: 'fields name, mail and phone are required!',
-        details: validationResult.error.details
+        details: validationResult.error.details[0].message.replace(/"/g, '')
       })
     }
 
@@ -50,10 +50,12 @@ module.exports = {
       return res.status(400).json({
         status: 400,
         message: 'invalid data',
-        details: validationResult.error.details
+        details: validationResult.error.details[0].message.replace(/"/g, '')
       })
     }
 
     next()
   }
 }
+
+// message: ${message.replace(/"/g, '')},

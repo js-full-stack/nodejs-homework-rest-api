@@ -82,7 +82,7 @@ const updateContact = async (req, res, next) => {
       if (contact.id === Number(contactId)) {
         contact.name = name || contact.name
         contact.email = email || contact.email
-        contact.phone = phone || contact.phone
+        contact.phone = phosgane || contact.phone
       }
     })
 

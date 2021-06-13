@@ -32,7 +32,7 @@
       "pre-commit": "lint-staged"
     },
     "lint-staged": {
-      "*": "npm run lint"
+      "**/*.{js, json}": "npm run lint"
     }
   }
 }

@@ -1,4 +1,4 @@
 
 {
-  "**/*.{js,json}": ["npm run lint:fix", "git add"]
+  "**/*.js": ["npm run lint:fix", "git add"]
 }

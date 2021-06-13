@@ -44,7 +44,7 @@ const addContact = async (req, res, next) => {
     const newContact = {
       id: Date.now(),
       name,
-      email,
+      email
       phone
     }
 

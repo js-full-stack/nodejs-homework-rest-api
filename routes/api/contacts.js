@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const {
-  postContactsValidation,
+  postContactsValidation
   putContactsValidation,
   patchContactsValidation
 } = require('../../middlewears/contactsValidation')

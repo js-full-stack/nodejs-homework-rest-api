@@ -57,5 +57,3 @@ module.exports = {
     next()
   }
 }
-
-// message: ${message.replace(/"/g, '')},

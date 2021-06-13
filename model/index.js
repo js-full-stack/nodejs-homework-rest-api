@@ -1,6 +1,5 @@
 const fs = require('fs/promises')
 const path = require('path')
-const { v4: uuidv4 } = require('uuid')
 
 const contactsPath = path.join(__dirname, './contacts.json')
 
@@ -13,7 +12,7 @@ const getAllContacts = async () => {
 const listContacts = async (req, res) => {
   try {
     const contacts = await getAllContacts()
-    return res.json({ contacts, status: 'success' })
+    return res.status(200).json({ contacts, status: 200, message: 'success' })
   } catch (error) {
     console.erorr(error)
   }
@@ -28,11 +27,12 @@ const getContactById = async (req, res) => {
       contact => contact.id === Number(contactId)
     )
     if (!contact) {
-      return res.status(400).json({
-        status: `failure, contact with id '${contactId}' not found!`
+      return res.status(404).json({
+        status: 404,
+        message: `failure, contact with id '${contactId}' not found!`
       })
     }
-    return res.json({ contact, status: 'success' })
+    return res.status(200).json({ contact, status: 200, message: 'success' })
   } catch (error) {
     console.error(error)
   }
@@ -42,7 +42,7 @@ const addContact = async (req, res) => {
   const { name, email, phone } = req.body
   try {
     const newContact = {
-      id: uuidv4(),
+      id: Date.now(),
       name,
       email,
       phone
@@ -51,7 +51,7 @@ const addContact = async (req, res) => {
     const contactList = await getAllContacts()
     const newContactList = [...contactList, newContact]
     await fs.writeFile(contactsPath, JSON.stringify(newContactList), 'utf-8')
-    return res.json({ status: 'success' })
+    return res.status(201).json({ status: 201, message: 'success' })
   } catch (error) {
     console.error(error)
   }
@@ -60,71 +60,46 @@ const addContact = async (req, res) => {
 const removeContact = async (req, res) => {
   try {
     const { contactId } = req.params
-    const contactList = getAllContacts()
+    const contactList = await getAllContacts()
     const newContactList = contactList.filter(
-      contact => contact.id !== contactId
+      contact => contact.id !== Number(contactId)
     )
     await fs.writeFile(contactsPath, JSON.stringify(newContactList), 'utf-8')
+    return res.status(200).json({ status: 200, message: 'contact deleted' })
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const updateContact = async (req, res) => {
+  try {
+    const { contactId } = req.params
+    const { name, email, phone } = req.body
+
+    const contactsList = await getAllContacts()
+
+    const changeContact = contactsList.forEach(contact => {
+      if (contact.id === Number(contactId)) {
+        contact.name = name || contact.name
+        contact.email = email || contact.email
+        contact.phone = phone || contact.phone
+      }
+    })
+
+    const newContact = changeContact
+      ? [...contactsList, ...changeContact]
+      : contactsList
+    await fs.writeFile(contactsPath, JSON.stringify(newContact), 'utf-8')
     return res.json({ status: 'success' })
   } catch (error) {
     console.error(error)
   }
 }
 
-const putContact = async (req, res) => {
-  try {
-    const { name, email, phone } = req.body
-    const { contactId } = req.params
-    const contactsList = await getAllContacts()
-    const changeContact = contactsList.forEach(contact => {
-      if (contact.id === Number(contactId)) {
-        contact.name = name
-        contact.email = email
-        contact.phone = phone
-      }
-    })
-
-    const newContact = [...contactsList, changeContact]
-    await fs.writeFile(contactsPath, JSON.stringify(newContact), 'utf-8')
-    return res.json({ newContact })
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-// const updateContact = async (req, res) => {
-//   try {
-//     const { contactId } = req.params
-//     const { name, email, phone } = req.body
-
-//     const contactList = await getAllContacts()
-//     const updData = contactList.forEach(contact => {
-//       if (Number(contact.id) === Number(contactId)) {
-//         if (name) {
-//           contact.name = name
-//           fs.writeFile(contactsPath, JSON.stringify(name), 'utf-8')
-//         }
-//         if (email) {
-//           contact.email = email
-//         }
-//         if (phone) {
-//           contact.phone = phone
-//         }
-//       }
-//     })
-
-//     fs.writeFile(contactsPath, JSON.stringify(updData), 'utf-8')
-//     return res.json({ status: 'success' })
-//   } catch (error) {
-//     console.error(error)
-//   }
-// }
-
 module.exports = {
   listContacts,
   getContactById,
   addContact,
   removeContact,
-  // updateContact,
-  putContact
+  updateContact
 }

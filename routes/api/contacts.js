@@ -6,7 +6,7 @@ const {
   putContactsValidation,
   patchContactsValidation
 } = require('../../middlewears/contactsValidation')
-aasg
+
 const {
   listContacts,
   getContactById,

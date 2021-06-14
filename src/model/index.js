@@ -1,8 +1,8 @@
 const fs = require('fs/promises')
 const path = require('path')
+const { status } = require('../helpers/constants')
 
 const contactsPath = path.join(__dirname, './contacts.json')
-
 const getAllContacts = async () => {
   const contactsList = await fs.readFile(contactsPath, 'utf-8')
   const parsedContacts = JSON.parse(contactsList)
@@ -12,7 +12,9 @@ const getAllContacts = async () => {
 const listContacts = async (_, res, next) => {
   try {
     const contacts = await getAllContacts()
-    return res.status(200).json({ contacts, status: 200, message: 'success' })
+    return res
+      .status(status.OK)
+      .json({ contacts, status: status.OK, message: 'success' })
   } catch (error) {
     next(error)
   }
@@ -27,12 +29,14 @@ const getContactById = async (req, res, next) => {
       contact => contact.id === Number(contactId)
     )
     if (!contact) {
-      return res.status(404).json({
-        status: 404,
+      return res.status(status.NOT_FOUND).json({
+        status: status.NOT_FOUND,
         message: `failure, contact with id '${contactId}' not found!`
       })
     }
-    return res.status(200).json({ contact, status: 200, message: 'success' })
+    return res
+      .status(200)
+      .json({ contact, status: status.OK, message: 'success' })
   } catch (error) {
     next(error)
   }
@@ -51,7 +55,9 @@ const addContact = async (req, res, next) => {
     const contactList = await getAllContacts()
     const newContactList = [...contactList, newContact]
     await fs.writeFile(contactsPath, JSON.stringify(newContactList), 'utf-8')
-    return res.status(201).json({ status: 201, message: 'success' })
+    return res
+      .status(status.CREATED)
+      .json({ status: status.CREATED, message: 'success' })
   } catch (error) {
     next(error)
   }
@@ -65,7 +71,9 @@ const removeContact = async (req, res, next) => {
       contact => contact.id !== Number(contactId)
     )
     await fs.writeFile(contactsPath, JSON.stringify(newContactList), 'utf-8')
-    return res.status(200).json({ status: 200, message: 'contact deleted' })
+    return res
+      .status(status.OK)
+      .json({ status: status.OK, message: 'contact deleted' })
   } catch (error) {
     next(error)
   }
@@ -90,7 +98,7 @@ const updateContact = async (req, res, next) => {
       ? [...contactsList, ...changeContact]
       : contactsList
     await fs.writeFile(contactsPath, JSON.stringify(newContact), 'utf-8')
-    return res.json({ status: 'success' })
+    return res.status(status.OK).json({ status: status.OK, message: 'success' })
   } catch (error) {
     next(error)
   }

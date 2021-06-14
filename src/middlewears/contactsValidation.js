@@ -1,4 +1,5 @@
 const Joi = require('joi')
+const { Status } = require('../helpers/constants')
 
 module.exports = {
   postContactsValidation: (req, res, next) => {
@@ -11,7 +12,7 @@ module.exports = {
     const validationResult = schema.validate(req.body)
     if (validationResult.error) {
       return res.status(400).json({
-        status: 400,
+        status: Status.BAD_REQUEST,
         message: 'fields name, mail and phone are required!',
         details: validationResult.error.details[0].message.replace(/"/g, '')
       })
@@ -30,7 +31,7 @@ module.exports = {
     const validationResult = schema.validate(req.body)
     if (validationResult.error) {
       return res.status(400).json({
-        status: 400,
+        status: Status.BAD_REQUEST,
         message: 'fields name, mail and phone are required!',
         details: validationResult.error.details[0].message.replace(/"/g, '')
       })
@@ -48,7 +49,7 @@ module.exports = {
     const validationResult = schema.validate(req.body)
     if (validationResult.error) {
       return res.status(400).json({
-        status: 400,
+        status: Status.BAD_REQUEST,
         message: 'invalid data',
         details: validationResult.error.details[0].message.replace(/"/g, '')
       })

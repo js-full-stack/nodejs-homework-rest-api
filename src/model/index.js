@@ -3,6 +3,7 @@ const path = require('path')
 const { status } = require('../helpers/constants')
 
 const contactsPath = path.join(__dirname, './contacts.json')
+
 const getAllContacts = async () => {
   const contactsList = await fs.readFile(contactsPath, 'utf-8')
   const parsedContacts = JSON.parse(contactsList)

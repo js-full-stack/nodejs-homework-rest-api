@@ -7,19 +7,22 @@ const {
   patchContactsValidation
 } = require('../../middlewears/contactsValidation')
 
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact
-} = require('../../model/index')
+const modelsMiddleweare = require('../../middlewears/models')
 
-router.get('/', listContacts)
+const {
+  getContacts,
+  getContactById
+  // addContact,
+  // changeContact,
+  // deleteContact
+} = require('../../controllers/contactsController')
+
+router.use(modelsMiddleweare)
+router.get('/', getContacts)
 router.get('/:contactId', getContactById)
-router.post('/', postContactsValidation, addContact)
-router.delete('/:contactId', removeContact)
-router.put('/:contactId', putContactsValidation, updateContact)
-router.patch('/:contactId', patchContactsValidation, updateContact)
+// router.post('/', postContactsValidation, addContact)
+// router.delete('/:contactId', removeContact)
+// router.put('/:contactId', putContactsValidation, updateContact)
+// router.patch('/:contactId', patchContactsValidation, updateContact)
 
 module.exports = router

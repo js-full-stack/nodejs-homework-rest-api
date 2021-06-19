@@ -1,6 +1,5 @@
 const ObjectId = require('mongodb').ObjectID
 
-const { connectMongo } = require('../db/connection')
 const getContacts = async (req, res) => {
   const contacts = await req.db.Contacts.find({}).toArray()
   res.json({ contacts })

@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 const { Status } = require('../helpers/constants')
 const { CustomErr } = require('../helpers/errors')
-const { User } = require('../db/userModel')
 const authMiddleware = async (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1]
 

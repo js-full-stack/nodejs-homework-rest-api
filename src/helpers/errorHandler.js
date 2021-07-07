@@ -1,7 +1,17 @@
-const errorHandler = controller => {
+const { CustomErr } = require('./errors')
+const { Status } = require('./constants')
+
+const acyncWrapper = controller => {
   return (req, res, next) => {
     controller(req, res).catch(next)
   }
 }
 
-module.exports = { errorHandler }
+const errorHandler = (error, req, res, next) => {
+  if (error instanceof CustomErr) {
+    return res.status(error.status).json({ message: error.message })
+  }
+  res.status(Status.INTERNAL_SERVER_ERROR).json({ message: error.message })
+}
+
+module.exports = { acyncWrapper, errorHandler }

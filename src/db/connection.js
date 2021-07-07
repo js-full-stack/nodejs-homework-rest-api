@@ -1,18 +1,13 @@
-const MongoClient = require('mongodb').MongoClient
-const collections = {}
-// require('dotenv').config()
-
-const getCollections = () => {
-  return collections
-}
+const mongoose = require('mongoose')
 
 const connectMongo = async () => {
-  const client = await MongoClient.connect(process.env.MONGO_URL, {
+  mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-  const db = client.db()
-  collections.Contacts = db.collection('contacts')
+  console.log('Database connection successful')
 }
 
-module.exports = { connectMongo, getCollections }
+module.exports = {
+  connectMongo
+}

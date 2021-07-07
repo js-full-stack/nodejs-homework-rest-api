@@ -9,7 +9,6 @@ const authMiddleware = async (req, res, next) => {
   }
   try {
     const user = jwt.decode(token, process.env.JWT_SECRET)
-    const u = await User.findById(user._id)
 
     req.token = token
     req.user = user

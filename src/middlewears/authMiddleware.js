@@ -4,6 +4,7 @@ const { CustomErr } = require('../helpers/errors')
 const { User } = require('../db/userModel')
 const authMiddleware = async (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1]
+
   if (!token) {
     next(new CustomErr(Status.UNAUTHORIZED, 'Please, provide a token'))
   }

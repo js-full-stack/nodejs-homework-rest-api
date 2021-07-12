@@ -1,3 +1,4 @@
+const path = require('path')
 const Status = {
   OK: 200,
   CREATED: 201,
@@ -11,6 +12,12 @@ const Status = {
   INTERNAL_SERVER_ERROR: 500
 }
 
+const avatarStorage = {
+  TEMPRORARY: path.join(process.cwd(), process.env.TMP_DIR),
+  PERMANENT: path.join(process.cwd(), 'public', process.env.IMAGE_DIR)
+}
+
 module.exports = {
-  Status
+  Status,
+  avatarStorage
 }

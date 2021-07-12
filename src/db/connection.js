@@ -5,9 +5,25 @@ const connectMongo = async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-  console.log('Database connection successful')
 }
 
-module.exports = {
-  connectMongo
-}
+mongoose.connection.on('connected', () => {
+  console.log('Database connection successful')
+})
+
+mongoose.connection.on('error', error => {
+  console.log(`connection error: ${error.message}`)
+})
+
+mongoose.connection.on('disconnected', () => {
+  console.log('disconnection occurred')
+})
+
+process.on('SIGINT', () => {
+  mongoose.connection.close(() => {
+    console.log('Connection to DB closed')
+    process.exit(1)
+  })
+})
+
+module.exports = { connectMongo }

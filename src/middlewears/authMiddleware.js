@@ -5,7 +5,7 @@ const authMiddleware = async (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1]
 
   if (!token) {
-    next(new CustomErr(Status.UNAUTHORIZED, 'Please, provide a token'))
+    return next(new CustomErr(Status.UNAUTHORIZED, 'Please, provide a token'))
   }
   try {
     const user = jwt.decode(token, process.env.JWT_SECRET)
@@ -13,7 +13,7 @@ const authMiddleware = async (req, res, next) => {
     req.token = token
     req.user = user
 
-    next()
+    return next()
   } catch (err) {
     next(new CustomErr(Status.UNAUTHORIZED, 'Please, provide a token'))
   }

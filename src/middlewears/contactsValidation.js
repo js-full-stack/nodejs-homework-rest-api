@@ -19,7 +19,11 @@ module.exports = {
 
     const validationResult = schema.validate(req.body)
     if (validationResult.error) {
-      next(new CustomErr(validationResult.error.details[0].message.replace(/"/g, '')))
+      next(
+        new CustomErr(
+          validationResult.error.details[0].message.replace(/"/g, '')
+        )
+      )
     }
 
     next()
@@ -45,7 +49,11 @@ module.exports = {
 
     const validationResult = schema.validate(req.body)
     if (validationResult.error) {
-      next(new CustomErr(validationResult.error.details[0].message.replace(/"/g, '')))
+      next(
+        new CustomErr(
+          validationResult.error.details[0].message.replace(/"/g, '')
+        )
+      )
     }
 
     next()
@@ -58,7 +66,11 @@ module.exports = {
 
     const validationResult = schema.validate(req.body)
     if (validationResult.error) {
-      next(new CustomErr(validationResult.error.details[0].message.replace(/"/g, '')))
+      next(
+        new CustomErr(
+          validationResult.error.details[0].message.replace(/"/g, '')
+        )
+      )
     }
 
     next()

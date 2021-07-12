@@ -1,0 +1,17 @@
+.input__fileName {
+  width: 200px;
+
+  margin-right: 5px;
+}
+
+.file__descripion {
+  display: block;
+  width: 200px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.label__descr {
+  display: block;
+  margin-top: 15px;
+}

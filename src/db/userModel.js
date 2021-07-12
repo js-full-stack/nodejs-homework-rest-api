@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
-
+const gravatar = require('gravatar')
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -19,6 +19,12 @@ const userSchema = new mongoose.Schema({
   token: {
     type: String,
     default: null
+  },
+  avatarURL: {
+    type: String,
+    default: function () {
+      return gravatar.url(this.email, { s: '250' }, true)
+    }
   }
 })
 
@@ -28,6 +34,6 @@ userSchema.pre('save', async function (next) {
   }
   next()
 })
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model('user', userSchema)
 
 module.exports = { User }

@@ -1,53 +1,65 @@
-const ObjectId = require('mongodb').ObjectID
+const { Status } = require('../helpers/constants')
+const { contactsService } = require('../services/contactsService')
 
-const getContacts = async (req, res) => {
-  const contacts = await req.db.Contacts.find({}).toArray()
-  res.json({ contacts })
+const getContactsController = async (req, res) => {
+  const { _id: userId } = req.user
+  let { skip = 0, limit = 5 } = req.query
+  limit = parseInt(limit) > 10 ? 10 : parseInt(limit)
+  skip = parseInt(skip)
+  const contacts = await contactsService.getContacts(userId, { skip, limit })
+  return res.json({ contacts, skip, limit })
 }
 
-const getContactById = async (req, res) => {
+const getContactByIdController = async (req, res) => {
   const { contactId } = req.params
-  const contact = await req.db.Contacts.findOne({
-    _id: new ObjectId(contactId)
+  const { _id: userId } = req.user
+  const contact = await contactsService.getContactById(contactId, userId)
+
+  return res.status(Status.OK).json({ contact, status: Status.OK })
+}
+
+const addContactController = async (req, res) => {
+  const { name, email, phone } = req.body
+  const { _id: userId } = req.user
+  console.log(userId)
+
+  await contactsService.addContact({ name, email, phone }, userId)
+
+  return res.json({
+    status: Status.CREATED,
+    message: `a contact with a name ${req.body.name} has been added`
   })
-
-  if (!contact) {
-    return res.status(400).json({
-      status: `failure, no contact with id '${contactId}' found!`
-    })
-  }
-
-  res.json({ contact, status: 'success' })
 }
 
-const addContact = async (req, res) => {
+const changeContactController = async (req, res) => {
   const { name, email, phone } = req.body
+  const { contactId } = req.params
+  const { _id: userId } = req.user
 
-  await req.db.Contacts.insert({ name, email, phone })
-
-  res.json({ status: 'success' })
-}
-
-const changeContact = async (req, res) => {
-  const { name, email, phone } = req.body
-
-  await req.db.Contacts.updateOne(
-    { _id: new ObjectId(req.params.contactId) },
-    { $set: { name, email, phone } }
+  await contactsService.changeContactById(
+    contactId,
+    { name, email, phone },
+    userId
   )
-
-  res.json({ status: 'success' })
+  return res.json({ status: Status.OK })
 }
 
-const deleteContact = async (req, res) => {
-  await req.db.Contacts.deleteOne({ _id: new ObjectId(req.params.contactId) })
-  res.json({ status: 'success' })
+const deleteContactController = async (req, res) => {
+  const { contactId } = req.params
+  const { _id: userId } = req.user
+
+  await contactsService.deleteContactById(contactId, userId)
+
+  return res.json({
+    status: Status.OK,
+    message: `contact with id ${contactId} was removed`
+  })
 }
 
 module.exports = {
-  getContacts,
-  getContactById,
-  addContact,
-  changeContact,
-  deleteContact
+  getContactsController,
+  getContactByIdController,
+  addContactController,
+  changeContactController,
+  deleteContactController
 }

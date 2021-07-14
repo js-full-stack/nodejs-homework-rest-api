@@ -1,8 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const { avatarStorage } = require('../../helpers/constants')
-// const fs = require('fs/promises')
-// const path = require('path')
 const uploadMiddleware = require('../../middlewears/uploadMiddleware')
 
 const { asyncWrapper } = require('../../helpers/errorHandler')

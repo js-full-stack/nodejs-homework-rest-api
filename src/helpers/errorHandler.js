@@ -1,7 +1,7 @@
 const { CustomErr } = require('./errors')
 const { Status } = require('./constants')
 
-const acyncWrapper = controller => {
+const asyncWrapper = controller => {
   return (req, res, next) => {
     controller(req, res).catch(next)
   }
@@ -14,4 +14,4 @@ const errorHandler = (error, req, res, next) => {
   res.status(Status.INTERNAL_SERVER_ERROR).json({ message: error.message })
 }
 
-module.exports = { acyncWrapper, errorHandler }
+module.exports = { asyncWrapper, errorHandler }

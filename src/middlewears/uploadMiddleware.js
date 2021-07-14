@@ -1,23 +1,24 @@
 const multer = require('multer')
-const { avatarStorage } = require('./constants')
+const { avatarStorage } = require('../helpers/constants')
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: (req, file, cb) => {
     cb(null, avatarStorage.TEMPRORARY)
   },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname)
+  filename: (req, file, cb) => {
+    const [filename, extension] = file.originalname.split('.')
+    cb(null, `${filename}$.${extension}`)
   }
 })
 const upload = multer({
-  storage: storage,
+  storage,
   limits: { fileSize: 2000000 },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.includes('image')) {
       cb(null, true)
       return
     }
-    cb(null, false)
+    return cb(null, false)
   }
 })
 

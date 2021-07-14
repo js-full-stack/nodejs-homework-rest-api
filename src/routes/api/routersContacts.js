@@ -7,7 +7,7 @@ const {
   patchStatusValidation
 } = require('../../middlewears/contactsValidation')
 
-const { acyncWrapper } = require('../../helpers/errorHandler')
+const { asyncWrapper } = require('../../helpers/errorHandler')
 
 const {
   getContactsController,
@@ -21,24 +21,24 @@ const { authMiddleware } = require('../../middlewears/authMiddleware')
 
 router.use(authMiddleware)
 
-router.get('/', acyncWrapper(getContactsController))
-router.get('/:contactId', acyncWrapper(getContactByIdController))
-router.post('/', postContactsValidation, acyncWrapper(addContactController))
-router.delete('/:contactId', acyncWrapper(deleteContactController))
+router.get('/', asyncWrapper(getContactsController))
+router.get('/:contactId', asyncWrapper(getContactByIdController))
+router.post('/', postContactsValidation, asyncWrapper(addContactController))
+router.delete('/:contactId', asyncWrapper(deleteContactController))
 router.put(
   '/:contactId',
   postContactsValidation,
-  acyncWrapper(changeContactController)
+  asyncWrapper(changeContactController)
 )
 router.patch(
   '/:contactId',
   patchContactsValidation,
-  acyncWrapper(changeContactController)
+  asyncWrapper(changeContactController)
 )
 router.patch(
   '/:contactId/favorite',
   patchStatusValidation,
-  acyncWrapper(changeContactController)
+  asyncWrapper(changeContactController)
 )
 
-module.exports = router
+module.exports = { contactsRouter: router }

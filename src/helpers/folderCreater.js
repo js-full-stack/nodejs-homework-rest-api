@@ -12,7 +12,7 @@ const createFolderIsNotExist = async folder => {
       await fs.mkdir(folder)
     }
   } catch (error) {
-    console.log(error)
+    return error
   }
 }
 

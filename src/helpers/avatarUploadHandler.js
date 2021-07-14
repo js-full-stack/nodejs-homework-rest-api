@@ -4,10 +4,9 @@ const fs = require('fs/promises')
 const { avatarStorage } = require('./constants')
 
 const avatarUploadHandler = async (req, res, next) => {
+  const { file } = req
+  const { filename } = file
   if (req.file) {
-    // todo: fs.rename( oldPath, newPath, callback )
-
-    const { file } = req
     const img = await jimp.read(file.path)
     await img
       .autocrop()
@@ -20,9 +19,11 @@ const avatarUploadHandler = async (req, res, next) => {
 
     await fs.rename(
       file.path,
-      path.join(avatarStorage.PERMANENT, file.originalname)
+      path.join(avatarStorage.PERMANENT, `${filename}`)
     )
   }
+
+  res.json({ status: 'success' })
 }
 
 module.exports = avatarUploadHandler

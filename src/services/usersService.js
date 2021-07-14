@@ -27,11 +27,11 @@ const usersService = {
     }
     return data
   },
-  async updateAvatar(userId, file, avatar, cb) {
-    const avatarURL = await cb(file, avatar)
-    await User.findByIdAndUpdate({ _id: userId }, { avatarURL }, { new: true })
-    console.log(avatarURL)
-    return avatarURL
+  async updateAvatar(userId, avatarURL) {
+    const changeAvatar = await User.findByIdAndUpdate(userId, avatarURL, {
+      new: true
+    })
+    return changeAvatar
   }
 }
 

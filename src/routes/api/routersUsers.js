@@ -11,8 +11,7 @@ const {
   registrationController,
   loginController,
   logoutController,
-  getCurrentUserController,
-  updateAvatarController
+  getCurrentUserController
 } = require('../../controllers/authController')
 const avatarUploadHandler = require('../../helpers/avatarUploadHandler')
 router.post('/registration', asyncWrapper(registrationController))
@@ -32,7 +31,7 @@ router.patch(
   '/avatar',
   authMiddleware,
   uploadMiddleware.single('avatar'),
-  asyncWrapper(updateAvatarController)
+  asyncWrapper(avatarUploadHandler)
 )
 
 module.exports = { usersRouter: router }

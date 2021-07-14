@@ -26,12 +26,6 @@ const usersService = {
       throw new CustomErr(Status.UNAUTHORIZED, 'Not authorized')
     }
     return data
-  },
-  async updateAvatar(userId, avatarURL) {
-    const changeAvatar = await User.findByIdAndUpdate(userId, avatarURL, {
-      new: true
-    })
-    return changeAvatar
   }
 }
 

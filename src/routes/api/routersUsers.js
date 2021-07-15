@@ -11,7 +11,10 @@ const {
   logoutController,
   getCurrentUserController
 } = require('../../controllers/authController')
-const avatarUploadHandler = require('../../helpers/avatarUploadHandler')
+const {
+  // avatarUploadHandler
+  updateAvatar
+} = require('../../helpers/avatarUploadHandler')
 router.post('/registration', asyncWrapper(registrationController))
 router.post('/login', asyncWrapper(loginController))
 router.post('/logout', authMiddleware, asyncWrapper(logoutController))
@@ -19,8 +22,9 @@ router.get('/current', authMiddleware, asyncWrapper(getCurrentUserController))
 
 router.post(
   '/upload',
+  authMiddleware,
   uploadMiddleware.single('avatar'),
-  asyncWrapper(avatarUploadHandler)
+  asyncWrapper(updateAvatar)
 )
 
 router.use(express.static(avatarStorage.PERMANENT))
@@ -29,7 +33,7 @@ router.patch(
   '/avatar',
   authMiddleware,
   uploadMiddleware.single('avatar'),
-  asyncWrapper(avatarUploadHandler)
+  asyncWrapper(updateAvatar)
 )
 
 module.exports = { usersRouter: router }

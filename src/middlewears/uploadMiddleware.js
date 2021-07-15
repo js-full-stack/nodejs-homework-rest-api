@@ -1,3 +1,5 @@
+const { v4 } = require('uuid')
+
 const multer = require('multer')
 const { avatarStorage } = require('../helpers/constants')
 
@@ -7,7 +9,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const [filename, extension] = file.originalname.split('.')
-    cb(null, `${filename}$.${extension}`)
+    cb(null, `${filename}${v4()}.${extension}`)
   }
 })
 const upload = multer({

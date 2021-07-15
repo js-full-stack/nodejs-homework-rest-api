@@ -26,6 +26,9 @@ const usersService = {
       throw new CustomErr(Status.UNAUTHORIZED, 'Not authorized')
     }
     return data
+  },
+  async updateAvatar(userId, avatar) {
+    return await User.updateOne({ userId }, { avatar })
   }
 }
 

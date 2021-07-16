@@ -10,16 +10,6 @@ const jwt = require('jsonwebtoken')
 const SECRET_KEY = process.env.JWT_SECRET
 
 const authService = {
-  async registration(email, password) {
-    const checkUniqueUser = await usersService.findUserByEmail(email)
-    if (checkUniqueUser) {
-      throw new CustomErr(Status.CONFLICT, `User with email ${email} exist`)
-    }
-    const user = await usersService.addUser(email, password)
-
-    await user.save()
-  },
-
   async login(email, password) {
     const user = await usersService.findUserByEmail(email)
 

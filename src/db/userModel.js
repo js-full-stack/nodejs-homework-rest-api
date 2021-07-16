@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const gravatar = require('gravatar')
+const { v4 } = require('uuid')
+
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -19,6 +21,15 @@ const userSchema = new mongoose.Schema({
   token: {
     type: String,
     default: null
+  },
+  verify: {
+    type: Boolean,
+    default: false
+  },
+  verifyTokenEmail: {
+    type: String,
+    required: [true, 'Verify token is required'],
+    default: v4()
   },
   avatarURL: {
     type: String,

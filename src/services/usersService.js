@@ -15,8 +15,13 @@ const usersService = {
     return data
   },
 
-  async addUser(email, password) {
-    const data = await new User({ email, password })
+  async addUser(userOptions) {
+    const data = await new User(userOptions)
+    return await data.save()
+  },
+
+  async findUserByVerifyTokenEmail(token) {
+    const data = await User.findOne({ verifyTokenEmail: token })
     return data
   },
 
@@ -26,6 +31,17 @@ const usersService = {
       throw new CustomErr(Status.UNAUTHORIZED, 'Not authorized')
     }
     return data
+  },
+
+  async updateVerifyToken(userId, verify, verifyToken) {
+    return await User.updateOne(
+      { userId },
+      { verify, verifyTokenEmail: verifyToken }
+    )
+  },
+
+  async updateAvatar(userId, avatar) {
+    return await User.updateOne({ userId }, { avatar })
   }
 }
 
